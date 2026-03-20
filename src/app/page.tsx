@@ -70,6 +70,212 @@ interface Template {
   stickers: StickerInstance[];
 }
 
+interface TwibbonTemplate {
+  id: string;
+  name: string;
+  preview: string;
+  category: string;
+  type: 'css' | 'png';
+  photoArea: {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+    borderRadius: number;
+  };
+  cssStyle?: {
+    background?: string;
+    borderWidth?: number;
+    borderColor?: string;
+    borderStyle?: string;
+    shadow?: string;
+    frameGradient?: string;
+    frameThickness?: number;
+  };
+  pngUrl?: string;
+}
+
+interface CustomTemplate {
+  id: string;
+  name: string;
+  pngUrl: string;
+  photoArea: {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+    borderRadius: number;
+  };
+}
+
+const TWIBBON_TEMPLATES: TwibbonTemplate[] = [
+  {
+    id: 'frame-circle',
+    name: 'Circle Frame',
+    preview: '⭕',
+    category: 'Circle',
+    type: 'css',
+    photoArea: { x: 100, y: 100, width: 200, height: 200, borderRadius: 100 },
+    cssStyle: {
+      borderWidth: 8,
+      borderColor: '#f5af19',
+      borderStyle: 'solid',
+      shadow: '0 4px 20px rgba(245, 175, 25, 0.5)',
+    },
+  },
+  {
+    id: 'frame-circle-pink',
+    name: 'Circle Pink',
+    preview: '💗',
+    category: 'Circle',
+    type: 'css',
+    photoArea: { x: 100, y: 100, width: 200, height: 200, borderRadius: 100 },
+    cssStyle: {
+      borderWidth: 10,
+      borderColor: '#ec008c',
+      borderStyle: 'solid',
+      shadow: '0 4px 20px rgba(236, 0, 140, 0.5)',
+    },
+  },
+  {
+    id: 'frame-circle-blue',
+    name: 'Circle Blue',
+    preview: '🔵',
+    category: 'Circle',
+    type: 'css',
+    photoArea: { x: 100, y: 100, width: 200, height: 200, borderRadius: 100 },
+    cssStyle: {
+      borderWidth: 10,
+      borderColor: '#2193b0',
+      borderStyle: 'solid',
+      shadow: '0 4px 20px rgba(33, 147, 176, 0.5)',
+    },
+  },
+  {
+    id: 'frame-square-gold',
+    name: 'Square Gold',
+    preview: '🟡',
+    category: 'Square',
+    type: 'css',
+    photoArea: { x: 100, y: 100, width: 200, height: 200, borderRadius: 20 },
+    cssStyle: {
+      borderWidth: 12,
+      borderColor: '#ffd700',
+      borderStyle: 'solid',
+      shadow: '0 4px 20px rgba(255, 215, 0, 0.5)',
+    },
+  },
+  {
+    id: 'frame-square-green',
+    name: 'Square Green',
+    preview: '🟢',
+    category: 'Square',
+    type: 'css',
+    photoArea: { x: 100, y: 100, width: 200, height: 200, borderRadius: 20 },
+    cssStyle: {
+      borderWidth: 12,
+      borderColor: '#38ef7d',
+      borderStyle: 'solid',
+      shadow: '0 4px 20px rgba(56, 239, 125, 0.5)',
+    },
+  },
+  {
+    id: 'frame-oval',
+    name: 'Oval Frame',
+    preview: '🥚',
+    category: 'Oval',
+    type: 'css',
+    photoArea: { x: 100, y: 80, width: 200, height: 240, borderRadius: 100 },
+    cssStyle: {
+      borderWidth: 8,
+      borderColor: '#667eea',
+      borderStyle: 'solid',
+      shadow: '0 4px 20px rgba(102, 126, 234, 0.5)',
+    },
+  },
+  {
+    id: 'frame-heart',
+    name: 'Heart Shape',
+    preview: '💖',
+    category: 'Special',
+    type: 'css',
+    photoArea: { x: 90, y: 100, width: 220, height: 200, borderRadius: 50 },
+    cssStyle: {
+      borderWidth: 6,
+      borderColor: '#ff6b6b',
+      borderStyle: 'solid',
+      shadow: '0 4px 20px rgba(255, 107, 107, 0.5)',
+    },
+  },
+  {
+    id: 'frame-polaroid',
+    name: 'Polaroid',
+    preview: '📷',
+    category: 'Special',
+    type: 'css',
+    photoArea: { x: 80, y: 60, width: 240, height: 200, borderRadius: 4 },
+    cssStyle: {
+      background: '#ffffff',
+      borderWidth: 0,
+      borderColor: 'transparent',
+      shadow: '0 8px 30px rgba(0, 0, 0, 0.4)',
+    },
+  },
+  {
+    id: 'frame-gradient-1',
+    name: 'Gradient Frame 1',
+    preview: '🌈',
+    category: 'Gradient',
+    type: 'css',
+    photoArea: { x: 80, y: 80, width: 240, height: 240, borderRadius: 30 },
+    cssStyle: {
+      frameGradient: 'linear-gradient(135deg, #f5af19 0%, #f12711 100%)',
+      frameThickness: 15,
+      shadow: '0 4px 30px rgba(245, 175, 25, 0.6)',
+    },
+  },
+  {
+    id: 'frame-gradient-2',
+    name: 'Gradient Frame 2',
+    preview: '🌸',
+    category: 'Gradient',
+    type: 'css',
+    photoArea: { x: 80, y: 80, width: 240, height: 240, borderRadius: 30 },
+    cssStyle: {
+      frameGradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+      frameThickness: 15,
+      shadow: '0 4px 30px rgba(102, 126, 234, 0.6)',
+    },
+  },
+  {
+    id: 'frame-gradient-3',
+    name: 'Gradient Frame 3',
+    preview: '💜',
+    category: 'Gradient',
+    type: 'css',
+    photoArea: { x: 80, y: 80, width: 240, height: 240, borderRadius: 30 },
+    cssStyle: {
+      frameGradient: 'linear-gradient(135deg, #ec008c 0%, #fc6767 100%)',
+      frameThickness: 15,
+      shadow: '0 4px 30px rgba(236, 0, 140, 0.6)',
+    },
+  },
+  {
+    id: 'frame-starry',
+    name: 'Starry Frame',
+    preview: '⭐',
+    category: 'Special',
+    type: 'css',
+    photoArea: { x: 90, y: 90, width: 220, height: 220, borderRadius: 20 },
+    cssStyle: {
+      borderWidth: 15,
+      borderColor: '#ffd700',
+      borderStyle: 'double',
+      shadow: '0 4px 30px rgba(255, 215, 0, 0.7)',
+    },
+  },
+];
+
 export default function TwibbonEditor() {
   const [image, setImage] = useState<string | null>(null);
   const [originalImage, setOriginalImage] = useState<string | null>(null);
@@ -83,7 +289,7 @@ export default function TwibbonEditor() {
   const [frameThickness, setFrameThickness] = useState(40);
   const [rotation, setRotation] = useState(0);
   const [zoom, setZoom] = useState(1);
-  const [activeTab, setActiveTab] = useState<'frame' | 'text' | 'filter' | 'sticker' | 'crop' | 'resize' | 'adjust'>('frame');
+  const [activeTab, setActiveTab] = useState<'frame' | 'text' | 'filter' | 'sticker' | 'crop' | 'resize' | 'adjust' | 'twibbon'>('frame');
   const [stickers, setStickers] = useState<StickerInstance[]>([]);
   const [selectedSticker, setSelectedSticker] = useState<StickerInstance | null>(null);
   const [stickerSize, setStickerSize] = useState(48);
@@ -105,10 +311,27 @@ export default function TwibbonEditor() {
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
   const [panStart, setPanStart] = useState({ x: 0, y: 0 });
+  const [selectedTwibbonTemplate, setSelectedTwibbonTemplate] = useState<TwibbonTemplate | null>(null);
+  const [customTemplates, setCustomTemplates] = useState<CustomTemplate[]>([]);
+  const [customTemplateImage, setCustomTemplateImage] = useState<string | null>(null);
+  const [showCustomTemplateModal, setShowCustomTemplateModal] = useState(false);
+  const [templatePhotoArea, setTemplatePhotoArea] = useState({ x: 50, y: 50, width: 300, height: 300, borderRadius: 0 });
   const editorRef = useRef<HTMLDivElement>(null);
   const imageContainerRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const templateFileInputRef = useRef<HTMLInputElement>(null);
   const bgRemovedRef = useRef(false);
+
+  useEffect(() => {
+    const saved = localStorage.getItem('twibbon-templates');
+    if (saved) {
+      setTemplates(JSON.parse(saved));
+    }
+    const savedCustom = localStorage.getItem('custom-twibbon-templates');
+    if (savedCustom) {
+      setCustomTemplates(JSON.parse(savedCustom));
+    }
+  }, []);
 
   useEffect(() => {
     const saved = localStorage.getItem('twibbon-templates');
@@ -440,56 +663,119 @@ export default function TwibbonEditor() {
                 ref={editorRef}
                 className="relative overflow-hidden rounded-xl w-full max-w-[320px] sm:max-w-[400px] aspect-square"
                 style={{
-                  background: image ? '#000' : '#1a1a2e',
+                  background: '#1a1a2e',
                 }}
               >
                 {image ? (
                   <>
-                    <div
-                      ref={imageContainerRef}
-                      className="absolute cursor-grab touch-none"
-                      style={{
-                        width: '640px',
-                        height: '640px',
-                        left: '50%',
-                        top: '50%',
-                        transform: `translate(calc(-50% + ${panX}px), calc(-50% + ${panY}px)) rotate(${rotation}deg) scale(${zoom})`,
-                        transformOrigin: 'center center',
-                      }}
-                      onMouseDown={handleMouseDown}
-                      onMouseMove={handleMouseMove}
-                      onMouseUp={handleMouseUp}
-                      onMouseLeave={handleMouseUp}
-                      onWheel={handleWheel}
-                      onTouchStart={(e) => {
-                        if (e.touches.length === 1) {
-                          const touch = e.touches[0];
-                          setIsDragging(true);
-                          setDragStart({ x: touch.clientX, y: touch.clientY });
-                          setPanStart({ x: panX, y: panY });
-                        }
-                      }}
-                      onTouchMove={(e) => {
-                        if (!isDragging || e.touches.length !== 1) return;
-                        e.preventDefault();
-                        const touch = e.touches[0];
-                        const dx = (touch.clientX - dragStart.x) / zoom;
-                        const dy = (touch.clientY - dragStart.y) / zoom;
-                        setPanX(panStart.x + dx);
-                        setPanY(panStart.y + dy);
-                      }}
-                      onTouchEnd={() => setIsDragging(false)}
-                    >
-                      <img
-                        src={image}
-                        alt="Preview"
-                        className="w-full h-full object-contain pointer-events-none select-none"
+                    {selectedTwibbonTemplate || customTemplateImage ? (
+                      <>
+                        {customTemplateImage && (
+                          <img
+                            src={customTemplateImage}
+                            alt="Template"
+                            className="absolute inset-0 w-full h-full object-contain pointer-events-none"
+                          />
+                        )}
+                        <div
+                          className="absolute cursor-grab touch-none overflow-hidden"
+                          style={{
+                            left: `${templatePhotoArea.x}px`,
+                            top: `${templatePhotoArea.y}px`,
+                            width: `${templatePhotoArea.width}px`,
+                            height: `${templatePhotoArea.height}px`,
+                            borderRadius: `${templatePhotoArea.borderRadius}px`,
+                          }}
+                          onMouseDown={handleMouseDown}
+                          onMouseMove={handleMouseMove}
+                          onMouseUp={handleMouseUp}
+                          onMouseLeave={handleMouseUp}
+                          onWheel={handleWheel}
+                          onTouchStart={(e) => {
+                            if (e.touches.length === 1) {
+                              const touch = e.touches[0];
+                              setIsDragging(true);
+                              setDragStart({ x: touch.clientX, y: touch.clientY });
+                              setPanStart({ x: panX, y: panY });
+                            }
+                          }}
+                          onTouchMove={(e) => {
+                            if (!isDragging || e.touches.length !== 1) return;
+                            e.preventDefault();
+                            const touch = e.touches[0];
+                            const dx = (touch.clientX - dragStart.x) / zoom;
+                            const dy = (touch.clientY - dragStart.y) / zoom;
+                            setPanX(panStart.x + dx);
+                            setPanY(panStart.y + dy);
+                          }}
+                          onTouchEnd={() => setIsDragging(false)}
+                        >
+                          <img
+                            src={image}
+                            alt="Preview"
+                            className="absolute pointer-events-none select-none"
+                            style={{
+                              filter: selectedFilter.filter,
+                              width: '640px',
+                              height: '640px',
+                              left: '50%',
+                              top: '50%',
+                              transform: `translate(-50%, -50%) translate(${panX}px, ${panY}px) rotate(${rotation}deg) scale(${zoom})`,
+                              transformOrigin: 'center center',
+                              maxWidth: 'none',
+                              maxHeight: 'none',
+                            }}
+                            draggable={false}
+                          />
+                        </div>
+                      </>
+                    ) : (
+                      <div
+                        ref={imageContainerRef}
+                        className="absolute cursor-grab touch-none"
                         style={{
-                          filter: selectedFilter.filter,
+                          width: '640px',
+                          height: '640px',
+                          left: '50%',
+                          top: '50%',
+                          transform: `translate(calc(-50% + ${panX}px), calc(-50% + ${panY}px)) rotate(${rotation}deg) scale(${zoom})`,
+                          transformOrigin: 'center center',
                         }}
-                        draggable={false}
-                      />
-                    </div>
+                        onMouseDown={handleMouseDown}
+                        onMouseMove={handleMouseMove}
+                        onMouseUp={handleMouseUp}
+                        onMouseLeave={handleMouseUp}
+                        onWheel={handleWheel}
+                        onTouchStart={(e) => {
+                          if (e.touches.length === 1) {
+                            const touch = e.touches[0];
+                            setIsDragging(true);
+                            setDragStart({ x: touch.clientX, y: touch.clientY });
+                            setPanStart({ x: panX, y: panY });
+                          }
+                        }}
+                        onTouchMove={(e) => {
+                          if (!isDragging || e.touches.length !== 1) return;
+                          e.preventDefault();
+                          const touch = e.touches[0];
+                          const dx = (touch.clientX - dragStart.x) / zoom;
+                          const dy = (touch.clientY - dragStart.y) / zoom;
+                          setPanX(panStart.x + dx);
+                          setPanY(panStart.y + dy);
+                        }}
+                        onTouchEnd={() => setIsDragging(false)}
+                      >
+                        <img
+                          src={image}
+                          alt="Preview"
+                          className="w-full h-full object-contain pointer-events-none select-none"
+                          style={{
+                            filter: selectedFilter.filter,
+                          }}
+                          draggable={false}
+                        />
+                      </div>
+                    )}
                     {getActiveFrames().map((frame) => (
                       <div
                         key={frame.id}
@@ -500,6 +786,30 @@ export default function TwibbonEditor() {
                         }}
                       />
                     ))}
+                    {selectedTwibbonTemplate && selectedTwibbonTemplate.type === 'css' && (
+                      <div
+                        className="absolute pointer-events-none"
+                        style={{
+                          left: `${selectedTwibbonTemplate.photoArea.x}px`,
+                          top: `${selectedTwibbonTemplate.photoArea.y}px`,
+                          width: `${selectedTwibbonTemplate.photoArea.width}px`,
+                          height: `${selectedTwibbonTemplate.photoArea.height}px`,
+                          borderRadius: `${selectedTwibbonTemplate.photoArea.borderRadius}px`,
+                          ...(selectedTwibbonTemplate.cssStyle?.frameGradient ? {
+                            background: selectedTwibbonTemplate.cssStyle.frameGradient,
+                            padding: `${selectedTwibbonTemplate.cssStyle.frameThickness || 10}px`,
+                            boxSizing: 'border-box',
+                            boxShadow: selectedTwibbonTemplate.cssStyle.shadow,
+                          } : {
+                            borderWidth: `${selectedTwibbonTemplate.cssStyle?.borderWidth || 8}px`,
+                            borderColor: selectedTwibbonTemplate.cssStyle?.borderColor || '#000',
+                            borderStyle: selectedTwibbonTemplate.cssStyle?.borderStyle || 'solid',
+                            boxShadow: selectedTwibbonTemplate.cssStyle?.shadow,
+                            boxSizing: 'border-box',
+                          }),
+                        }}
+                      />
+                    )}
                     {stickers.map((sticker) => (
                       <div
                         key={sticker.id}
@@ -585,11 +895,11 @@ export default function TwibbonEditor() {
           <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-4 sm:p-6 border border-white/10">
             <div className="flex gap-1 sm:gap-2 mb-4 sm:mb-6 overflow-x-auto pb-2 -mx-1 px-1">
               {[
-                { id: 'frame', icon: ImageIcon, label: 'Frame' },
+                { id: 'twibbon', icon: ImageIcon, label: 'Template' },
+                { id: 'frame', icon: Palette, label: 'Frame' },
                 { id: 'text', icon: Type, label: 'Teks' },
                 { id: 'filter', icon: Palette, label: 'Filter' },
                 { id: 'sticker', icon: Plus, label: 'Stiker' },
-                { id: 'crop', icon: Scissors, label: 'Crop' },
                 { id: 'adjust', icon: Move, label: 'Atur' },
                 { id: 'resize', icon: Maximize2, label: 'Resize' },
               ].map((tab) => (
@@ -608,6 +918,166 @@ export default function TwibbonEditor() {
                 </button>
               ))}
             </div>
+
+            {activeTab === 'twibbon' && (
+              <div className="space-y-4 sm:space-y-6">
+                <div>
+                  <div className="flex items-center justify-between mb-3">
+                    <label className="block text-white/70 font-medium text-sm sm:text-base">
+                      Template Frame Twibbon
+                    </label>
+                    <button
+                      onClick={() => setShowCustomTemplateModal(true)}
+                      className="px-3 py-1 bg-purple-500/30 hover:bg-purple-500/40 rounded-lg text-purple-300 text-xs sm:text-sm"
+                    >
+                      + PNG Custom
+                    </button>
+                  </div>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3">
+                    {TWIBBON_TEMPLATES.map((template) => (
+                      <button
+                        key={template.id}
+                        onClick={() => {
+                          setSelectedTwibbonTemplate(template);
+                          setCustomTemplateImage(null);
+                          setTemplatePhotoArea(template.photoArea);
+                          setPanX(0);
+                          setPanY(0);
+                          setZoom(1);
+                        }}
+                        className={`p-3 rounded-xl border-2 transition-all ${
+                          selectedTwibbonTemplate?.id === template.id
+                            ? 'border-blue-500 bg-blue-500/20'
+                            : 'border-white/20 hover:border-white/40'
+                        }`}
+                      >
+                        <div className="text-3xl mb-2 text-center">{template.preview}</div>
+                        <p className="text-white text-xs text-center truncate">{template.name}</p>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {customTemplates.length > 0 && (
+                  <div>
+                    <label className="block text-white/70 mb-3 font-medium text-sm sm:text-base">
+                      Template Custom Saya
+                    </label>
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3">
+                      {customTemplates.map((template) => (
+                        <button
+                          key={template.id}
+                          onClick={() => {
+                            setCustomTemplateImage(template.pngUrl);
+                            setSelectedTwibbonTemplate(null);
+                            setTemplatePhotoArea(template.photoArea);
+                            setPanX(0);
+                            setPanY(0);
+                            setZoom(1);
+                          }}
+                          className={`p-2 rounded-xl border-2 transition-all ${
+                            customTemplateImage === template.pngUrl
+                              ? 'border-blue-500 bg-blue-500/20'
+                              : 'border-white/20 hover:border-white/40'
+                          }`}
+                        >
+                          <div className="w-full h-16 bg-white/10 rounded-lg mb-2 overflow-hidden">
+                            <img src={template.pngUrl} alt={template.name} className="w-full h-full object-contain" />
+                          </div>
+                          <p className="text-white text-xs text-center truncate">{template.name}</p>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {(selectedTwibbonTemplate || customTemplateImage) && (
+                  <div className="pt-4 border-t border-white/10 space-y-4">
+                    <div className="flex items-center justify-between">
+                      <label className="text-white/70 font-medium text-sm">
+                        Atur Area Foto
+                      </label>
+                      <button
+                        onClick={() => {
+                          setSelectedTwibbonTemplate(null);
+                          setCustomTemplateImage(null);
+                        }}
+                        className="px-3 py-1 bg-red-500/20 hover:bg-red-500/30 rounded-lg text-red-400 text-xs"
+                      >
+                        Hapus Template
+                      </button>
+                    </div>
+                    
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-white/50 text-xs mb-1">X</label>
+                        <input
+                          type="number"
+                          value={templatePhotoArea.x}
+                          onChange={(e) => setTemplatePhotoArea(prev => ({ ...prev, x: Number(e.target.value) }))}
+                          className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white text-sm"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-white/50 text-xs mb-1">Y</label>
+                        <input
+                          type="number"
+                          value={templatePhotoArea.y}
+                          onChange={(e) => setTemplatePhotoArea(prev => ({ ...prev, y: Number(e.target.value) }))}
+                          className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white text-sm"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-white/50 text-xs mb-1">Width</label>
+                        <input
+                          type="number"
+                          value={templatePhotoArea.width}
+                          onChange={(e) => setTemplatePhotoArea(prev => ({ ...prev, width: Number(e.target.value) }))}
+                          className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white text-sm"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-white/50 text-xs mb-1">Height</label>
+                        <input
+                          type="number"
+                          value={templatePhotoArea.height}
+                          onChange={(e) => setTemplatePhotoArea(prev => ({ ...prev, height: Number(e.target.value) }))}
+                          className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white text-sm"
+                        />
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <label className="block text-white/50 text-xs mb-1">Border Radius: {templatePhotoArea.borderRadius}px</label>
+                      <input
+                        type="range"
+                        min="0"
+                        max="150"
+                        value={templatePhotoArea.borderRadius}
+                        onChange={(e) => setTemplatePhotoArea(prev => ({ ...prev, borderRadius: Number(e.target.value) }))}
+                        className="w-full accent-blue-500"
+                      />
+                    </div>
+                  </div>
+                )}
+
+                <div className="pt-4 border-t border-white/10">
+                  <button
+                    onClick={() => {
+                      setSelectedTwibbonTemplate(null);
+                      setCustomTemplateImage(null);
+                      setTemplatePhotoArea({ x: 50, y: 50, width: 300, height: 300, borderRadius: 0 });
+                      setPanX(0);
+                      setPanY(0);
+                      setZoom(1);
+                    }}
+                    className="w-full px-4 py-3 bg-white/10 hover:bg-white/20 rounded-xl text-white font-medium transition-colors"
+                  >
+                    Reset Template
+                  </button>
+                </div>
+              </div>
+            )}
 
             {activeTab === 'frame' && (
               <div className="space-y-4 sm:space-y-6">
@@ -1369,6 +1839,132 @@ export default function TwibbonEditor() {
                 Belum ada template tersimpan
               </p>
             )}
+          </div>
+        </div>
+      )}
+
+      {showCustomTemplateModal && (
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-2 sm:p-4">
+          <div className="bg-slate-800 rounded-2xl p-4 sm:p-6 max-w-full sm:max-w-lg w-full">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg sm:text-xl font-bold text-white">Upload Template PNG</h2>
+              <button onClick={() => setShowCustomTemplateModal(false)} className="text-white/70 hover:text-white p-1">
+                <X className="w-5 h-5 sm:w-6 sm:h-6" />
+              </button>
+            </div>
+            
+            <p className="text-white/70 text-sm mb-4">
+              Upload template PNG dengan area kosong transparan untuk foto Anda.
+            </p>
+
+            <div className="space-y-4">
+              <div>
+                <label className="block text-white/70 text-sm mb-2">Nama Template</label>
+                <input
+                  type="text"
+                  id="customTemplateName"
+                  placeholder="Contoh: Template Ulang Tahun"
+                  className="w-full px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white placeholder:text-white/40 focus:outline-none focus:border-blue-500 text-sm"
+                />
+              </div>
+
+              <div>
+                <label className="block text-white/70 text-sm mb-2">Area Foto</label>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                  <div>
+                    <label className="block text-white/50 text-xs mb-1">X</label>
+                    <input
+                      type="number"
+                      id="areaX"
+                      value={templatePhotoArea.x}
+                      onChange={(e) => setTemplatePhotoArea(prev => ({ ...prev, x: Number(e.target.value) }))}
+                      className="w-full px-2 py-1 bg-white/10 border border-white/20 rounded text-white text-sm"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-white/50 text-xs mb-1">Y</label>
+                    <input
+                      type="number"
+                      id="areaY"
+                      value={templatePhotoArea.y}
+                      onChange={(e) => setTemplatePhotoArea(prev => ({ ...prev, y: Number(e.target.value) }))}
+                      className="w-full px-2 py-1 bg-white/10 border border-white/20 rounded text-white text-sm"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-white/50 text-xs mb-1">Width</label>
+                    <input
+                      type="number"
+                      id="areaWidth"
+                      value={templatePhotoArea.width}
+                      onChange={(e) => setTemplatePhotoArea(prev => ({ ...prev, width: Number(e.target.value) }))}
+                      className="w-full px-2 py-1 bg-white/10 border border-white/20 rounded text-white text-sm"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-white/50 text-xs mb-1">Height</label>
+                    <input
+                      type="number"
+                      id="areaHeight"
+                      value={templatePhotoArea.height}
+                      onChange={(e) => setTemplatePhotoArea(prev => ({ ...prev, height: Number(e.target.value) }))}
+                      className="w-full px-2 py-1 bg-white/10 border border-white/20 rounded text-white text-sm"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-white/70 text-sm mb-2">Upload File PNG</label>
+                <input
+                  type="file"
+                  id="customTemplateFile"
+                  accept="image/png"
+                  className="hidden"
+                />
+                <div className="border-2 border-dashed border-white/20 rounded-xl p-6 text-center hover:border-white/40 transition-colors">
+                  <Upload className="w-8 h-8 mx-auto mb-2 text-white/50" />
+                  <p className="text-white/70 text-sm">Klik untuk upload template PNG</p>
+                </div>
+              </div>
+
+              <div className="flex gap-2 pt-4">
+                <button
+                  onClick={() => setShowCustomTemplateModal(false)}
+                  className="flex-1 px-4 py-2 bg-white/10 hover:bg-white/20 rounded-lg text-white font-medium transition-colors text-sm"
+                >
+                  Batal
+                </button>
+                <button
+                  onClick={() => {
+                    const nameInput = document.getElementById('customTemplateName') as HTMLInputElement;
+                    const fileInput = document.getElementById('customTemplateFile') as HTMLInputElement;
+                    if (nameInput.value && fileInput.files?.[0]) {
+                      const reader = new FileReader();
+                      reader.onload = (e) => {
+                        const newTemplate: CustomTemplate = {
+                          id: Date.now().toString(),
+                          name: nameInput.value,
+                          pngUrl: e.target?.result as string,
+                          photoArea: { ...templatePhotoArea },
+                        };
+                        const updated = [...customTemplates, newTemplate];
+                        setCustomTemplates(updated);
+                        localStorage.setItem('custom-twibbon-templates', JSON.stringify(updated));
+                        setCustomTemplateImage(newTemplate.pngUrl);
+                        setSelectedTwibbonTemplate(null);
+                        setShowCustomTemplateModal(false);
+                        nameInput.value = '';
+                      };
+                      reader.readAsDataURL(fileInput.files[0]);
+                    }
+                  }}
+                  className="flex-1 px-4 py-2 bg-purple-500 hover:bg-purple-600 rounded-lg text-white font-medium transition-colors text-sm"
+                >
+                  Simpan & Gunakan
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       )}

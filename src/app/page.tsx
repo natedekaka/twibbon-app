@@ -1285,8 +1285,11 @@ export default function TwibbonEditor() {
           </div>
         </div>
 
-        <footer className="mt-12 text-center text-white/40">
-          <p>Buat twibbon keren untuk media sosial kamu!</p>
+        <footer className="mt-12 text-center text-white/40 pb-8">
+          <p className="mb-2">Buat twibbon keren untuk media sosial kamu!</p>
+          <p className="text-sm">
+            Made with ❤️ by <span className="text-blue-400 font-semibold">natedekaka</span>
+          </p>
         </footer>
       </main>
 

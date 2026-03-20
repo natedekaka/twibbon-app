@@ -1020,6 +1020,31 @@ export default function TwibbonEditor() {
 
             {activeTab === 'twibbon' && (
               <div className="space-y-4 sm:space-y-6">
+                <div className="p-4 bg-blue-500/10 rounded-xl border border-blue-500/30">
+                  <p className="text-blue-300 font-medium mb-2 flex items-center gap-2">
+                    <span className="text-xl">🖼️</span> Template Twibbon
+                  </p>
+                  <p className="text-white/70 text-sm mb-3">Pilih template frame, lalu upload foto untuk dimasukkan ke area kosong.</p>
+                  <div className="space-y-2 text-sm">
+                    <div className="flex items-start gap-2">
+                      <span className="bg-blue-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">1</span>
+                      <p className="text-white/80"><strong>Pilih Template</strong> - Pilih frame twibbon yang tersedia</p>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <span className="bg-blue-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">2</span>
+                      <p className="text-white/80"><strong>Upload Foto</strong> - Foto akan otomatis masuk ke area kosong</p>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <span className="bg-blue-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">3</span>
+                      <p className="text-white/80"><strong>Geser/Zoom</strong> - Atur posisi foto dalam frame</p>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <span className="bg-blue-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">4</span>
+                      <p className="text-white/80"><strong>+ Custom PNG</strong> - Upload template PNG kamu sendiri</p>
+                    </div>
+                  </div>
+                </div>
+
                 <div>
                   <div className="flex items-center justify-between mb-3">
                     <label className="block text-white/70 font-medium text-sm sm:text-base">
@@ -1181,8 +1206,32 @@ export default function TwibbonEditor() {
             {activeTab === 'comped' && (
               <div className="space-y-4 sm:space-y-6">
                 <div className="p-4 bg-purple-500/10 rounded-xl border border-purple-500/30">
-                  <p className="text-purple-300 font-medium mb-1">📸 Mode Comped Photo</p>
-                  <p className="text-white/70 text-sm">Upload 2 foto: foto utama + foto untuk dimasukkan ke frame kosong.</p>
+                  <p className="text-purple-300 font-medium mb-2 flex items-center gap-2">
+                    <span className="text-xl">📸</span> Mode Comped Photo
+                  </p>
+                  <p className="text-white/70 text-sm mb-3">Gabungkan 2 foto dengan frame kosong di tengahnya!</p>
+                  <div className="space-y-2 text-sm">
+                    <div className="flex items-start gap-2">
+                      <span className="bg-purple-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">1</span>
+                      <p className="text-white/80"><strong>Upload Foto 1</strong> - Ini akan menjadi foto background/utama</p>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <span className="bg-purple-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">2</span>
+                      <p className="text-white/80"><strong>Atur Frame</strong> - Tentukan posisi & ukuran frame kosong</p>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <span className="bg-purple-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">3</span>
+                      <p className="text-white/80"><strong>Upload Foto 2</strong> - Foto yang akan dimasukkan ke dalam frame</p>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <span className="bg-purple-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">4</span>
+                      <p className="text-white/80"><strong>Atur Foto 2</strong> - Geser & zoom foto dalam frame</p>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <span className="bg-green-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">✓</span>
+                      <p className="text-green-400"><strong>Download</strong> - Simpan hasil komposisi foto</p>
+                    </div>
+                  </div>
                 </div>
 
                 <div>

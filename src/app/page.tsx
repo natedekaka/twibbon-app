@@ -289,7 +289,7 @@ export default function TwibbonEditor() {
   const [frameThickness, setFrameThickness] = useState(40);
   const [rotation, setRotation] = useState(0);
   const [zoom, setZoom] = useState(1);
-  const [activeTab, setActiveTab] = useState<'frame' | 'text' | 'filter' | 'sticker' | 'crop' | 'resize' | 'adjust' | 'twibbon'>('frame');
+  const [activeTab, setActiveTab] = useState<'frame' | 'text' | 'filter' | 'sticker' | 'crop' | 'resize' | 'adjust' | 'twibbon' | 'comped'>('frame');
   const [stickers, setStickers] = useState<StickerInstance[]>([]);
   const [selectedSticker, setSelectedSticker] = useState<StickerInstance | null>(null);
   const [stickerSize, setStickerSize] = useState(48);
@@ -316,9 +316,22 @@ export default function TwibbonEditor() {
   const [customTemplateImage, setCustomTemplateImage] = useState<string | null>(null);
   const [showCustomTemplateModal, setShowCustomTemplateModal] = useState(false);
   const [templatePhotoArea, setTemplatePhotoArea] = useState({ x: 50, y: 50, width: 300, height: 300, borderRadius: 0 });
+  const [photo2, setPhoto2] = useState<string | null>(null);
+  const [photo2Filter, setPhoto2Filter] = useState(FILTERS[0]);
+  const [frameArea, setFrameArea] = useState({ x: 80, y: 80, width: 240, height: 240, borderRadius: 0 });
+  const [frameBorder, setFrameBorder] = useState(20);
+  const [frameBorderColor, setFrameBorderColor] = useState('#ffffff');
+  const [frameBackgroundColor, setFrameBackgroundColor] = useState('transparent');
+  const [photo2PanX, setPhoto2PanX] = useState(0);
+  const [photo2PanY, setPhoto2PanY] = useState(0);
+  const [photo2Zoom, setPhoto2Zoom] = useState(1);
+  const [isDraggingPhoto2, setIsDraggingPhoto2] = useState(false);
+  const [photo2DragStart, setPhoto2DragStart] = useState({ x: 0, y: 0 });
+  const [photo2PanStart, setPhoto2PanStart] = useState({ x: 0, y: 0 });
   const editorRef = useRef<HTMLDivElement>(null);
   const imageContainerRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const fileInput2Ref = useRef<HTMLInputElement>(null);
   const templateFileInputRef = useRef<HTMLInputElement>(null);
   const bgRemovedRef = useRef(false);
 
@@ -668,113 +681,198 @@ export default function TwibbonEditor() {
               >
                 {image ? (
                   <>
-                    {selectedTwibbonTemplate || customTemplateImage ? (
+                    {photo2 ? (
                       <>
-                        {customTemplateImage && (
-                          <img
-                            src={customTemplateImage}
-                            alt="Template"
-                            className="absolute inset-0 w-full h-full object-contain pointer-events-none"
-                          />
-                        )}
+                        <img
+                          src={image}
+                          alt="Background"
+                          className="absolute inset-0 w-full h-full object-cover pointer-events-none"
+                        />
                         <div
-                          className="absolute cursor-grab touch-none overflow-hidden"
+                          className="absolute overflow-hidden"
                           style={{
-                            left: `${templatePhotoArea.x}px`,
-                            top: `${templatePhotoArea.y}px`,
-                            width: `${templatePhotoArea.width}px`,
-                            height: `${templatePhotoArea.height}px`,
-                            borderRadius: `${templatePhotoArea.borderRadius}px`,
+                            left: `${frameArea.x}px`,
+                            top: `${frameArea.y}px`,
+                            width: `${frameArea.width}px`,
+                            height: `${frameArea.height}px`,
+                            borderRadius: `${frameArea.borderRadius}px`,
+                            border: `${frameBorder}px solid ${frameBorderColor}`,
+                            boxShadow: frameBorderColor !== 'transparent' ? '0 4px 20px rgba(0,0,0,0.3)' : 'none',
                           }}
-                          onMouseDown={handleMouseDown}
-                          onMouseMove={handleMouseMove}
-                          onMouseUp={handleMouseUp}
-                          onMouseLeave={handleMouseUp}
-                          onWheel={handleWheel}
-                          onTouchStart={(e) => {
-                            if (e.touches.length === 1) {
-                              const touch = e.touches[0];
-                              setIsDragging(true);
-                              setDragStart({ x: touch.clientX, y: touch.clientY });
-                              setPanStart({ x: panX, y: panY });
-                            }
-                          }}
-                          onTouchMove={(e) => {
-                            if (!isDragging || e.touches.length !== 1) return;
-                            e.preventDefault();
-                            const touch = e.touches[0];
-                            const dx = (touch.clientX - dragStart.x) / zoom;
-                            const dy = (touch.clientY - dragStart.y) / zoom;
-                            setPanX(panStart.x + dx);
-                            setPanY(panStart.y + dy);
-                          }}
-                          onTouchEnd={() => setIsDragging(false)}
                         >
-                          <img
-                            src={image}
-                            alt="Preview"
-                            className="absolute pointer-events-none select-none"
+                          <div
+                            className="absolute cursor-grab touch-none"
                             style={{
-                              filter: selectedFilter.filter,
                               width: '640px',
                               height: '640px',
                               left: '50%',
                               top: '50%',
-                              transform: `translate(-50%, -50%) translate(${panX}px, ${panY}px) rotate(${rotation}deg) scale(${zoom})`,
+                              transform: `translate(-50%, -50%) translate(${photo2PanX}px, ${photo2PanY}px) scale(${photo2Zoom})`,
                               transformOrigin: 'center center',
-                              maxWidth: 'none',
-                              maxHeight: 'none',
                             }}
-                            draggable={false}
-                          />
+                            onMouseDown={(e) => {
+                              e.preventDefault();
+                              setIsDraggingPhoto2(true);
+                              setPhoto2DragStart({ x: e.clientX, y: e.clientY });
+                              setPhoto2PanStart({ x: photo2PanX, y: photo2PanY });
+                            }}
+                            onMouseMove={(e) => {
+                              if (!isDraggingPhoto2) return;
+                              e.preventDefault();
+                              const dx = (e.clientX - photo2DragStart.x) / photo2Zoom;
+                              const dy = (e.clientY - photo2DragStart.y) / photo2Zoom;
+                              setPhoto2PanX(photo2PanStart.x + dx);
+                              setPhoto2PanY(photo2PanStart.y + dy);
+                            }}
+                            onMouseUp={() => setIsDraggingPhoto2(false)}
+                            onMouseLeave={() => setIsDraggingPhoto2(false)}
+                            onTouchStart={(e) => {
+                              if (e.touches.length === 1) {
+                                const touch = e.touches[0];
+                                setIsDraggingPhoto2(true);
+                                setPhoto2DragStart({ x: touch.clientX, y: touch.clientY });
+                                setPhoto2PanStart({ x: photo2PanX, y: photo2PanY });
+                              }
+                            }}
+                            onTouchMove={(e) => {
+                              if (!isDraggingPhoto2 || e.touches.length !== 1) return;
+                              e.preventDefault();
+                              const touch = e.touches[0];
+                              const dx = (touch.clientX - photo2DragStart.x) / photo2Zoom;
+                              const dy = (touch.clientY - photo2DragStart.y) / photo2Zoom;
+                              setPhoto2PanX(photo2PanStart.x + dx);
+                              setPhoto2PanY(photo2PanStart.y + dy);
+                            }}
+                            onTouchEnd={() => setIsDraggingPhoto2(false)}
+                          >
+                            <img
+                              src={photo2}
+                              alt="Photo 2"
+                              className="pointer-events-none select-none"
+                              style={{
+                                filter: photo2Filter.filter,
+                                width: '640px',
+                                height: '640px',
+                                maxWidth: 'none',
+                                maxHeight: 'none',
+                                objectFit: 'cover',
+                              }}
+                              draggable={false}
+                            />
+                          </div>
                         </div>
                       </>
                     ) : (
-                      <div
-                        ref={imageContainerRef}
-                        className="absolute cursor-grab touch-none"
-                        style={{
-                          width: '640px',
-                          height: '640px',
-                          left: '50%',
-                          top: '50%',
-                          transform: `translate(calc(-50% + ${panX}px), calc(-50% + ${panY}px)) rotate(${rotation}deg) scale(${zoom})`,
-                          transformOrigin: 'center center',
-                        }}
-                        onMouseDown={handleMouseDown}
-                        onMouseMove={handleMouseMove}
-                        onMouseUp={handleMouseUp}
-                        onMouseLeave={handleMouseUp}
-                        onWheel={handleWheel}
-                        onTouchStart={(e) => {
-                          if (e.touches.length === 1) {
-                            const touch = e.touches[0];
-                            setIsDragging(true);
-                            setDragStart({ x: touch.clientX, y: touch.clientY });
-                            setPanStart({ x: panX, y: panY });
-                          }
-                        }}
-                        onTouchMove={(e) => {
-                          if (!isDragging || e.touches.length !== 1) return;
-                          e.preventDefault();
-                          const touch = e.touches[0];
-                          const dx = (touch.clientX - dragStart.x) / zoom;
-                          const dy = (touch.clientY - dragStart.y) / zoom;
-                          setPanX(panStart.x + dx);
-                          setPanY(panStart.y + dy);
-                        }}
-                        onTouchEnd={() => setIsDragging(false)}
-                      >
-                        <img
-                          src={image}
-                          alt="Preview"
-                          className="w-full h-full object-contain pointer-events-none select-none"
-                          style={{
-                            filter: selectedFilter.filter,
-                          }}
-                          draggable={false}
-                        />
-                      </div>
+                      <>
+                        {selectedTwibbonTemplate || customTemplateImage ? (
+                          <>
+                            {customTemplateImage && (
+                              <img
+                                src={customTemplateImage}
+                                alt="Template"
+                                className="absolute inset-0 w-full h-full object-contain pointer-events-none"
+                              />
+                            )}
+                            <div
+                              className="absolute cursor-grab touch-none overflow-hidden"
+                              style={{
+                                left: `${templatePhotoArea.x}px`,
+                                top: `${templatePhotoArea.y}px`,
+                                width: `${templatePhotoArea.width}px`,
+                                height: `${templatePhotoArea.height}px`,
+                                borderRadius: `${templatePhotoArea.borderRadius}px`,
+                              }}
+                              onMouseDown={handleMouseDown}
+                              onMouseMove={handleMouseMove}
+                              onMouseUp={handleMouseUp}
+                              onMouseLeave={handleMouseUp}
+                              onWheel={handleWheel}
+                              onTouchStart={(e) => {
+                                if (e.touches.length === 1) {
+                                  const touch = e.touches[0];
+                                  setIsDragging(true);
+                                  setDragStart({ x: touch.clientX, y: touch.clientY });
+                                  setPanStart({ x: panX, y: panY });
+                                }
+                              }}
+                              onTouchMove={(e) => {
+                                if (!isDragging || e.touches.length !== 1) return;
+                                e.preventDefault();
+                                const touch = e.touches[0];
+                                const dx = (touch.clientX - dragStart.x) / zoom;
+                                const dy = (touch.clientY - dragStart.y) / zoom;
+                                setPanX(panStart.x + dx);
+                                setPanY(panStart.y + dy);
+                              }}
+                              onTouchEnd={() => setIsDragging(false)}
+                            >
+                              <img
+                                src={image}
+                                alt="Preview"
+                                className="absolute pointer-events-none select-none"
+                                style={{
+                                  filter: selectedFilter.filter,
+                                  width: '640px',
+                                  height: '640px',
+                                  left: '50%',
+                                  top: '50%',
+                                  transform: `translate(-50%, -50%) translate(${panX}px, ${panY}px) rotate(${rotation}deg) scale(${zoom})`,
+                                  transformOrigin: 'center center',
+                                  maxWidth: 'none',
+                                  maxHeight: 'none',
+                                }}
+                                draggable={false}
+                              />
+                            </div>
+                          </>
+                        ) : (
+                          <div
+                            ref={imageContainerRef}
+                            className="absolute cursor-grab touch-none"
+                            style={{
+                              width: '640px',
+                              height: '640px',
+                              left: '50%',
+                              top: '50%',
+                              transform: `translate(calc(-50% + ${panX}px), calc(-50% + ${panY}px)) rotate(${rotation}deg) scale(${zoom})`,
+                              transformOrigin: 'center center',
+                            }}
+                            onMouseDown={handleMouseDown}
+                            onMouseMove={handleMouseMove}
+                            onMouseUp={handleMouseUp}
+                            onMouseLeave={handleMouseUp}
+                            onWheel={handleWheel}
+                            onTouchStart={(e) => {
+                              if (e.touches.length === 1) {
+                                const touch = e.touches[0];
+                                setIsDragging(true);
+                                setDragStart({ x: touch.clientX, y: touch.clientY });
+                                setPanStart({ x: panX, y: panY });
+                              }
+                            }}
+                            onTouchMove={(e) => {
+                              if (!isDragging || e.touches.length !== 1) return;
+                              e.preventDefault();
+                              const touch = e.touches[0];
+                              const dx = (touch.clientX - dragStart.x) / zoom;
+                              const dy = (touch.clientY - dragStart.y) / zoom;
+                              setPanX(panStart.x + dx);
+                              setPanY(panStart.y + dy);
+                            }}
+                            onTouchEnd={() => setIsDragging(false)}
+                          >
+                            <img
+                              src={image}
+                              alt="Preview"
+                              className="w-full h-full object-contain pointer-events-none select-none"
+                              style={{
+                                filter: selectedFilter.filter,
+                              }}
+                              draggable={false}
+                            />
+                          </div>
+                        )}
+                      </>
                     )}
                     {getActiveFrames().map((frame) => (
                       <div
@@ -897,6 +995,7 @@ export default function TwibbonEditor() {
               {[
                 { id: 'twibbon', icon: ImageIcon, label: 'Template' },
                 { id: 'frame', icon: Palette, label: 'Frame' },
+                { id: 'comped', icon: Scissors, label: 'Comped' },
                 { id: 'text', icon: Type, label: 'Teks' },
                 { id: 'filter', icon: Palette, label: 'Filter' },
                 { id: 'sticker', icon: Plus, label: 'Stiker' },
@@ -1074,6 +1173,254 @@ export default function TwibbonEditor() {
                     className="w-full px-4 py-3 bg-white/10 hover:bg-white/20 rounded-xl text-white font-medium transition-colors"
                   >
                     Reset Template
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {activeTab === 'comped' && (
+              <div className="space-y-4 sm:space-y-6">
+                <div className="p-4 bg-purple-500/10 rounded-xl border border-purple-500/30">
+                  <p className="text-purple-300 font-medium mb-1">📸 Mode Comped Photo</p>
+                  <p className="text-white/70 text-sm">Upload 2 foto: foto utama + foto untuk dimasukkan ke frame kosong.</p>
+                </div>
+
+                <div>
+                  <div className="flex gap-2 mb-3">
+                    <input
+                      type="file"
+                      ref={fileInputRef}
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) {
+                          const reader = new FileReader();
+                          reader.onload = (event) => {
+                            setImage(event.target?.result as string);
+                            setOriginalImage(event.target?.result as string);
+                          };
+                          reader.readAsDataURL(file);
+                        }
+                      }}
+                      accept="image/*"
+                      className="hidden"
+                    />
+                    <input
+                      type="file"
+                      ref={fileInput2Ref}
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) {
+                          const reader = new FileReader();
+                          reader.onload = (event) => {
+                            setPhoto2(event.target?.result as string);
+                            setPhoto2PanX(0);
+                            setPhoto2PanY(0);
+                            setPhoto2Zoom(1);
+                          };
+                          reader.readAsDataURL(file);
+                        }
+                      }}
+                      accept="image/*"
+                      className="hidden"
+                    />
+                    <button
+                      onClick={() => fileInputRef.current?.click()}
+                      className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-blue-500/20 hover:bg-blue-500/30 rounded-xl text-blue-300 font-medium transition-colors text-sm"
+                    >
+                      <Upload className="w-4 h-4" />
+                      {image ? 'Ganti Foto 1' : 'Upload Foto 1 (Background)'}
+                    </button>
+                    <button
+                      onClick={() => fileInput2Ref.current?.click()}
+                      disabled={!image}
+                      className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-purple-500/20 hover:bg-purple-500/30 disabled:opacity-50 disabled:cursor-not-allowed rounded-xl text-purple-300 font-medium transition-colors text-sm"
+                    >
+                      <Upload className="w-4 h-4" />
+                      {photo2 ? 'Ganti Foto 2' : 'Upload Foto 2 (di Frame)'}
+                    </button>
+                  </div>
+                </div>
+
+                {(image || photo2) && (
+                  <>
+                    <div className="pt-4 border-t border-white/10">
+                      <label className="block text-white/70 mb-3 font-medium text-sm sm:text-base">
+                        Atur Area Frame Kosong
+                      </label>
+                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-3">
+                        <div>
+                          <label className="block text-white/50 text-xs mb-1">X</label>
+                          <input
+                            type="number"
+                            value={frameArea.x}
+                            onChange={(e) => setFrameArea(prev => ({ ...prev, x: Number(e.target.value) }))}
+                            className="w-full px-2 py-1 bg-white/10 border border-white/20 rounded text-white text-sm"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-white/50 text-xs mb-1">Y</label>
+                          <input
+                            type="number"
+                            value={frameArea.y}
+                            onChange={(e) => setFrameArea(prev => ({ ...prev, y: Number(e.target.value) }))}
+                            className="w-full px-2 py-1 bg-white/10 border border-white/20 rounded text-white text-sm"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-white/50 text-xs mb-1">Width</label>
+                          <input
+                            type="number"
+                            value={frameArea.width}
+                            onChange={(e) => setFrameArea(prev => ({ ...prev, width: Number(e.target.value) }))}
+                            className="w-full px-2 py-1 bg-white/10 border border-white/20 rounded text-white text-sm"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-white/50 text-xs mb-1">Height</label>
+                          <input
+                            type="number"
+                            value={frameArea.height}
+                            onChange={(e) => setFrameArea(prev => ({ ...prev, height: Number(e.target.value) }))}
+                            className="w-full px-2 py-1 bg-white/10 border border-white/20 rounded text-white text-sm"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-3">
+                        <div>
+                          <label className="block text-white/50 text-xs mb-1">Border Frame: {frameBorder}px</label>
+                          <input
+                            type="range"
+                            min="0"
+                            max="50"
+                            value={frameBorder}
+                            onChange={(e) => setFrameBorder(Number(e.target.value))}
+                            className="w-full accent-purple-500"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-white/50 text-xs mb-1">Border Radius: {frameArea.borderRadius}px</label>
+                          <input
+                            type="range"
+                            min="0"
+                            max="150"
+                            value={frameArea.borderRadius}
+                            onChange={(e) => setFrameArea(prev => ({ ...prev, borderRadius: Number(e.target.value) }))}
+                            className="w-full accent-purple-500"
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="pt-4 border-t border-white/10 space-y-3">
+                      <div>
+                        <label className="block text-white/50 text-xs mb-2">Warna Border Frame</label>
+                        <div className="flex gap-2">
+                          {['#ffffff', '#ffd700', '#000000', '#333333', 'transparent'].map((color) => (
+                            <button
+                              key={color}
+                              onClick={() => setFrameBorderColor(color)}
+                              className={`w-8 h-8 rounded-lg border-2 transition-all ${
+                                frameBorderColor === color ? 'border-purple-500 scale-110' : 'border-white/20'
+                              } ${color === 'transparent' ? 'bg-gradient-to-br from-red-500 to-yellow-500' : ''}`}
+                              style={color !== 'transparent' ? { backgroundColor: color } : {}}
+                            />
+                          ))}
+                          <input
+                            type="color"
+                            value={frameBorderColor}
+                            onChange={(e) => setFrameBorderColor(e.target.value)}
+                            className="w-8 h-8 rounded cursor-pointer"
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    {photo2 && (
+                      <div className="pt-4 border-t border-white/10 space-y-3">
+                        <label className="block text-white/70 font-medium text-sm">
+                          Atur Foto 2 dalam Frame
+                        </label>
+                        <div className="grid grid-cols-2 gap-3">
+                          <div>
+                            <label className="block text-white/50 text-xs mb-1">Zoom: {(photo2Zoom * 100).toFixed(0)}%</label>
+                            <input
+                              type="range"
+                              min="0.3"
+                              max="2"
+                              step="0.05"
+                              value={photo2Zoom}
+                              onChange={(e) => setPhoto2Zoom(Number(e.target.value))}
+                              className="w-full accent-purple-500"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-white/50 text-xs mb-1">Posisi X: {photo2PanX.toFixed(0)}</label>
+                            <input
+                              type="range"
+                              min="-100"
+                              max="100"
+                              value={photo2PanX}
+                              onChange={(e) => setPhoto2PanX(Number(e.target.value))}
+                              className="w-full accent-purple-500"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-white/50 text-xs mb-1">Posisi Y: {photo2PanY.toFixed(0)}</label>
+                            <input
+                              type="range"
+                              min="-100"
+                              max="100"
+                              value={photo2PanY}
+                              onChange={(e) => setPhoto2PanY(Number(e.target.value))}
+                              className="w-full accent-purple-500"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-white/50 text-xs mb-1">Filter</label>
+                            <select
+                              value={photo2Filter.id}
+                              onChange={(e) => setPhoto2Filter(FILTERS.find(f => f.id === e.target.value) || FILTERS[0])}
+                              className="w-full px-2 py-1 bg-white/10 border border-white/20 rounded text-white text-xs"
+                            >
+                              {FILTERS.map((f) => (
+                                <option key={f.id} value={f.id}>{f.name}</option>
+                              ))}
+                            </select>
+                          </div>
+                        </div>
+                        <button
+                          onClick={() => {
+                            setPhoto2PanX(0);
+                            setPhoto2PanY(0);
+                            setPhoto2Zoom(1);
+                            setPhoto2Filter(FILTERS[0]);
+                          }}
+                          className="w-full px-3 py-2 bg-white/10 hover:bg-white/20 rounded-lg text-white/70 text-sm transition-colors"
+                        >
+                          Reset Posisi Foto 2
+                        </button>
+                      </div>
+                    )}
+                  </>
+                )}
+
+                <div className="pt-4 border-t border-white/10">
+                  <button
+                    onClick={() => {
+                      setImage(null);
+                      setOriginalImage(null);
+                      setPhoto2(null);
+                      setFrameArea({ x: 80, y: 80, width: 240, height: 240, borderRadius: 0 });
+                      setFrameBorder(20);
+                      setFrameBorderColor('#ffffff');
+                      setPhoto2PanX(0);
+                      setPhoto2PanY(0);
+                      setPhoto2Zoom(1);
+                    }}
+                    className="w-full px-4 py-3 bg-white/10 hover:bg-white/20 rounded-xl text-white font-medium transition-colors"
+                  >
+                    Reset Semua
                   </button>
                 </div>
               </div>

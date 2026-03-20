@@ -407,18 +407,19 @@ export default function TwibbonEditor() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
       <header className="bg-black/30 backdrop-blur-sm border-b border-white/10 sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
-          <h1 className="text-2xl font-bold text-white flex items-center gap-2">
-            <ImageIcon className="w-8 h-8" />
-            Twibbon Creator
+        <div className="max-w-7xl mx-auto px-4 py-3 sm:py-4 flex items-center justify-between">
+          <h1 className="text-lg sm:text-2xl font-bold text-white flex items-center gap-2">
+            <ImageIcon className="w-6 h-6 sm:w-8 sm:h-8" />
+            <span className="hidden xs:inline">Twibbon Creator</span>
+            <span className="xs:hidden">Twibbon</span>
           </h1>
           <div className="flex items-center gap-2">
             <button
               onClick={() => setShowTemplateModal(true)}
-              className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 rounded-lg text-white transition-colors"
+              className="flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-2 bg-white/10 hover:bg-white/20 rounded-lg text-white transition-colors text-sm sm:text-base"
             >
               <FolderOpen className="w-4 h-4" />
-              Template
+              <span className="hidden sm:inline">Template</span>
             </button>
             <button
               onClick={handleClearAll}
@@ -431,28 +432,25 @@ export default function TwibbonEditor() {
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-4 py-8">
-        <div className="grid lg:grid-cols-2 gap-8">
-          <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10">
-            <div className="flex justify-center mb-6">
+      <main className="max-w-7xl mx-auto px-3 sm:px-4 py-4 sm:py-8">
+        <div className="grid lg:grid-cols-2 gap-4 sm:gap-8">
+          <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-4 sm:p-6 border border-white/10">
+            <div className="flex justify-center mb-4 sm:mb-6">
               <div
                 ref={editorRef}
-                className="relative overflow-hidden rounded-xl"
+                className="relative overflow-hidden rounded-xl w-full max-w-[320px] sm:max-w-[400px] aspect-square"
                 style={{
-                  width: '400px',
-                  height: '400px',
                   background: image ? '#000' : '#1a1a2e',
-                  overflow: 'hidden',
                 }}
               >
                 {image ? (
                   <>
                     <div
                       ref={imageContainerRef}
-                      className="absolute cursor-grab"
+                      className="absolute cursor-grab touch-none"
                       style={{
-                        width: '800px',
-                        height: '800px',
+                        width: '640px',
+                        height: '640px',
                         left: '50%',
                         top: '50%',
                         transform: `translate(calc(-50% + ${panX}px), calc(-50% + ${panY}px)) rotate(${rotation}deg) scale(${zoom})`,
@@ -463,6 +461,24 @@ export default function TwibbonEditor() {
                       onMouseUp={handleMouseUp}
                       onMouseLeave={handleMouseUp}
                       onWheel={handleWheel}
+                      onTouchStart={(e) => {
+                        if (e.touches.length === 1) {
+                          const touch = e.touches[0];
+                          setIsDragging(true);
+                          setDragStart({ x: touch.clientX, y: touch.clientY });
+                          setPanStart({ x: panX, y: panY });
+                        }
+                      }}
+                      onTouchMove={(e) => {
+                        if (!isDragging || e.touches.length !== 1) return;
+                        e.preventDefault();
+                        const touch = e.touches[0];
+                        const dx = (touch.clientX - dragStart.x) / zoom;
+                        const dy = (touch.clientY - dragStart.y) / zoom;
+                        setPanX(panStart.x + dx);
+                        setPanY(panStart.y + dy);
+                      }}
+                      onTouchEnd={() => setIsDragging(false)}
                     >
                       <img
                         src={image}
@@ -530,7 +546,7 @@ export default function TwibbonEditor() {
               </div>
             </div>
 
-            <div className="flex justify-center gap-4 flex-wrap">
+            <div className="flex justify-center gap-2 sm:gap-4 flex-wrap">
               <input
                 type="file"
                 ref={fileInputRef}
@@ -540,31 +556,34 @@ export default function TwibbonEditor() {
               />
               <button
                 onClick={() => fileInputRef.current?.click()}
-                className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 rounded-xl text-white font-semibold transition-all transform hover:scale-105"
+                className="flex items-center justify-center gap-1 sm:gap-2 px-3 sm:px-6 py-2 sm:py-3 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 rounded-xl text-white font-semibold transition-all text-sm sm:text-base w-full sm:w-auto"
               >
-                <Upload className="w-5 h-5" />
-                Upload Foto
+                <Upload className="w-4 h-4 sm:w-5 sm:h-5" />
+                <span className="hidden xs:inline">Upload Foto</span>
+                <span className="xs:hidden">Upload</span>
               </button>
               <button
                 onClick={handleDownload}
                 disabled={!image}
-                className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 disabled:from-gray-500 disabled:to-gray-600 rounded-xl text-white font-semibold transition-all transform hover:scale-105 disabled:hover:scale-100 disabled:cursor-not-allowed"
+                className="flex items-center justify-center gap-1 sm:gap-2 px-3 sm:px-6 py-2 sm:py-3 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 disabled:from-gray-500 disabled:to-gray-600 rounded-xl text-white font-semibold transition-all text-sm sm:text-base w-full sm:w-auto disabled:cursor-not-allowed"
               >
-                <Download className="w-5 h-5" />
-                Download
+                <Download className="w-4 h-4 sm:w-5 sm:h-5" />
+                <span className="hidden xs:inline">Download</span>
+                <span className="xs:hidden">DL</span>
               </button>
               <button
                 onClick={() => setShowTemplateModal(true)}
-                className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 rounded-xl text-white font-semibold transition-all transform hover:scale-105"
+                className="flex items-center justify-center gap-1 sm:gap-2 px-3 sm:px-6 py-2 sm:py-3 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 rounded-xl text-white font-semibold transition-all text-sm sm:text-base w-full sm:w-auto"
               >
-                <Save className="w-5 h-5" />
-                Simpan Template
+                <Save className="w-4 h-4 sm:w-5 sm:h-5" />
+                <span className="hidden sm:inline">Simpan Template</span>
+                <span className="sm:hidden">Save</span>
               </button>
             </div>
           </div>
 
-          <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10">
-            <div className="flex gap-2 mb-6 flex-wrap">
+          <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-4 sm:p-6 border border-white/10">
+            <div className="flex gap-1 sm:gap-2 mb-4 sm:mb-6 overflow-x-auto pb-2 -mx-1 px-1">
               {[
                 { id: 'frame', icon: ImageIcon, label: 'Frame' },
                 { id: 'text', icon: Type, label: 'Teks' },
@@ -577,30 +596,31 @@ export default function TwibbonEditor() {
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id as typeof activeTab)}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all ${
+                  className={`flex items-center justify-center gap-1 sm:gap-2 px-2 sm:px-4 py-2 rounded-lg font-medium transition-all whitespace-nowrap ${
                     activeTab === tab.id
                       ? 'bg-blue-500 text-white'
                       : 'bg-white/10 text-white/70 hover:bg-white/20'
-                  }`}
+                  } text-xs sm:text-sm`}
                 >
-                  <tab.icon className="w-4 h-4" />
-                  {tab.label}
+                  <tab.icon className="w-3 h-3 sm:w-4 sm:h-4" />
+                  <span className="hidden xs:inline">{tab.label}</span>
+                  <span className="xs:hidden">{tab.label.slice(0, 3)}</span>
                 </button>
               ))}
             </div>
 
             {activeTab === 'frame' && (
-              <div className="space-y-6">
+              <div className="space-y-4 sm:space-y-6">
                 <div>
-                  <label className="block text-white/70 mb-3 font-medium">
+                  <label className="block text-white/70 mb-2 sm:mb-3 font-medium text-sm sm:text-base">
                     Pilih Frame (bisa pilih lebih dari 1)
                   </label>
-                  <div className="grid grid-cols-3 gap-3">
+                  <div className="grid grid-cols-3 sm:grid-cols-3 gap-2 sm:gap-3">
                     {FRAMES.map((frame) => (
                       <button
                         key={frame.id}
                         onClick={() => toggleFrame(frame.id)}
-                        className={`p-3 rounded-xl border-2 transition-all ${
+                        className={`p-2 sm:p-3 rounded-xl border-2 transition-all ${
                           selectedFrames.includes(frame.id)
                             ? 'border-blue-500 bg-blue-500/20'
                             : 'border-white/20 hover:border-white/40'
@@ -1285,37 +1305,37 @@ export default function TwibbonEditor() {
           </div>
         </div>
 
-        <footer className="mt-12 text-center text-white/40 pb-8">
-          <p className="mb-2">Buat twibbon keren untuk media sosial kamu!</p>
-          <p className="text-sm">
+        <footer className="mt-6 sm:mt-12 text-center text-white/40 pb-4 sm:pb-8 px-4">
+          <p className="mb-2 text-sm sm:text-base">Buat twibbon keren untuk media sosial kamu!</p>
+          <p className="text-xs sm:text-sm">
             Made with ❤️ by <span className="text-blue-400 font-semibold">natedekaka</span>
           </p>
         </footer>
       </main>
 
       {showTemplateModal && (
-        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
-          <div className="bg-slate-800 rounded-2xl p-6 max-w-md w-full max-h-[80vh] overflow-y-auto">
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-2 sm:p-4">
+          <div className="bg-slate-800 rounded-2xl p-4 sm:p-6 max-w-full sm:max-w-md w-full max-h-[80vh] overflow-y-auto">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xl font-bold text-white">Template</h2>
-              <button onClick={() => setShowTemplateModal(false)} className="text-white/70 hover:text-white">
-                <X className="w-6 h-6" />
+              <h2 className="text-lg sm:text-xl font-bold text-white">Template</h2>
+              <button onClick={() => setShowTemplateModal(false)} className="text-white/70 hover:text-white p-1">
+                <X className="w-5 h-5 sm:w-6 sm:h-6" />
               </button>
             </div>
 
             <div className="space-y-4 mb-6">
-              <div className="flex gap-2">
+              <div className="flex flex-col sm:flex-row gap-2">
                 <input
                   type="text"
                   value={templateName}
                   onChange={(e) => setTemplateName(e.target.value)}
                   placeholder="Nama template..."
-                  className="flex-1 px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white placeholder:text-white/40 focus:outline-none focus:border-blue-500"
+                  className="flex-1 px-3 sm:px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white placeholder:text-white/40 focus:outline-none focus:border-blue-500 text-sm sm:text-base"
                 />
                 <button
                   onClick={saveTemplate}
                   disabled={!templateName.trim()}
-                  className="px-4 py-2 bg-blue-500 hover:bg-blue-600 disabled:bg-gray-500 rounded-lg text-white font-medium transition-colors"
+                  className="px-3 sm:px-4 py-2 bg-blue-500 hover:bg-blue-600 disabled:bg-gray-500 rounded-lg text-white font-medium transition-colors text-sm sm:text-base"
                 >
                   Simpan
                 </button>
@@ -1324,23 +1344,17 @@ export default function TwibbonEditor() {
 
             {templates.length > 0 && (
               <div className="space-y-2">
-                <h3 className="text-white/70 font-medium mb-2">Template Tersimpan</h3>
+                <h3 className="text-white/70 font-medium mb-2 text-sm sm:text-base">Template Tersimpan</h3>
                 {templates.map((template) => (
                   <div
                     key={template.id}
-                    className="flex items-center justify-between p-3 bg-white/5 rounded-lg"
+                    className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3 bg-white/5 rounded-lg gap-2"
                   >
-                    <span className="text-white">{template.name}</span>
+                    <span className="text-white text-sm sm:text-base">{template.name}</span>
                     <div className="flex gap-2">
                       <button
                         onClick={() => loadTemplate(template)}
-                        className="px-3 py-1 bg-blue-500 hover:bg-blue-600 rounded text-white text-sm"
-                      >
-                        Gunakan
-                      </button>
-                      <button
-                        onClick={() => deleteTemplate(template.id)}
-                        className="px-3 py-1 bg-red-500/20 hover:bg-red-500/30 rounded text-red-400 text-sm"
+                        className="px-2 sm:px-3 py-1 bg-blue-500 hover:bg-blue-600 rounded text-white text-xs sm:text-sm"
                       >
                         Hapus
                       </button>
@@ -1360,15 +1374,15 @@ export default function TwibbonEditor() {
       )}
 
       {cropModalOpen && image && (
-        <div className="fixed inset-0 bg-black/90 flex items-center justify-center z-50 p-4">
-          <div className="bg-slate-800 rounded-2xl p-6 max-w-2xl w-full">
+        <div className="fixed inset-0 bg-black/90 flex items-center justify-center z-50 p-2 sm:p-4">
+          <div className="bg-slate-800 rounded-2xl p-4 sm:p-6 max-w-full sm:max-w-2xl w-full max-h-[95vh] overflow-y-auto">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xl font-bold text-white">Crop Foto</h2>
-              <button onClick={() => setCropModalOpen(false)} className="text-white/70 hover:text-white">
-                <X className="w-6 h-6" />
+              <h2 className="text-lg sm:text-xl font-bold text-white">Crop Foto</h2>
+              <button onClick={() => setCropModalOpen(false)} className="text-white/70 hover:text-white p-1">
+                <X className="w-5 h-5 sm:w-6 sm:h-6" />
               </button>
             </div>
-            <div className="relative w-full h-96 bg-black rounded-lg overflow-hidden mb-4">
+            <div className="relative w-full h-64 sm:h-96 bg-black rounded-lg overflow-hidden mb-4">
               <Cropper
                 image={image}
                 crop={crop}
@@ -1380,7 +1394,7 @@ export default function TwibbonEditor() {
               />
             </div>
             <div className="mb-4">
-              <label className="block text-white/70 mb-2 font-medium">
+              <label className="block text-white/70 mb-2 font-medium text-sm sm:text-base">
                 Zoom: {(zoom * 100).toFixed(0)}%
               </label>
               <input
@@ -1393,16 +1407,16 @@ export default function TwibbonEditor() {
                 className="w-full accent-blue-500"
               />
             </div>
-            <div className="flex gap-4">
+            <div className="flex gap-2 sm:gap-4">
               <button
                 onClick={() => setCropModalOpen(false)}
-                className="flex-1 px-4 py-3 bg-white/10 hover:bg-white/20 rounded-xl text-white font-medium transition-colors"
+                className="flex-1 px-3 sm:px-4 py-2 sm:py-3 bg-white/10 hover:bg-white/20 rounded-xl text-white font-medium transition-colors text-sm sm:text-base"
               >
                 Batal
               </button>
               <button
                 onClick={applyCrop}
-                className="flex-1 px-4 py-3 bg-blue-500 hover:bg-blue-600 rounded-xl text-white font-medium transition-colors"
+                className="flex-1 px-3 sm:px-4 py-2 sm:py-3 bg-blue-500 hover:bg-blue-600 rounded-xl text-white font-medium transition-colors text-sm sm:text-base"
               >
                 Terapkan Crop
               </button>
